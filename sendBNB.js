@@ -8,7 +8,7 @@ const firstWallet = wallets[0];
 const URL = 'https://bsc-testnet.infura.io/v3/76d6ec90a58e4984adea4d341e6b8de7';
 
 const provider = new ethers.JsonRpcProvider(URL);
-const mainWallet = new ethers.Wallet('PRIVATE_KEY', provider);
+const mainWallet = new ethers.Wallet('PRIVATE_KEY', provider); // replace PRIVATE_KEY with your own private key wallet
 
 async function sendBNB(amount) {
   try {
