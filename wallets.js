@@ -1,18 +1,29 @@
-import fs from 'fs';
-import { ethers } from 'ethers';
+import { JSONFilePreset } from 'lowdb/node';
 
-function generateWallets(count) {
-  let wallets = [];
+import sendBNB from './lib/sendBNB';
+import promptUser from './lib/promptUser';
+import distributeBNB from './lib/distributeBNB';
+import generateWallets from './lib/generateWallets';
 
-  for (let i = 0; i < count; i++) {
-    const wallet = ethers.Wallet.createRandom();
-    wallets.push({ address: wallet.address, privateKey: wallet.privateKey });
+const defaultData = { wallets: [] };
+const db = await JSONFilePreset('db.json', defaultData);
+
+async function main() {
+  const { count, userPrivateKey, amountBNB } = await promptUser();
+  const wallets = generateWallets(count);
+
+  await db.update((data) => {
+    data.wallets.push(...wallets);
+  });
+
+  if (wallets.length > 0) {
+    const firstWallet = wallets[0].address;
+
+    await sendBNB(userPrivateKey, firstWallet, amountBNB);
+    await distributeBNB(wallets);
   }
 
-  return wallets;
+  console.log(`Generated ${wallets.length} wallets successfully.`);
 }
 
-const wallets = generateWallets(20);
-fs.writeFileSync('wallets.json', JSON.stringify(wallets, null, 2));
-
-console.log(`Generated ${wallets.length} wallets successfully.`);
+main();
