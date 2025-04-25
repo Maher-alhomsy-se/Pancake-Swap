@@ -2,8 +2,8 @@ import { ethers } from 'ethers';
 import inquirer from 'inquirer';
 import { JSONFilePreset } from 'lowdb/node';
 
-import buyTokens from './buyTokens.js';
-import sellTokens from './sellTokens.js';
+import buyTokens from './lib/buyTokens.js';
+import sellTokens from './lib/sellTokens.js';
 import waitForFunds from './lib/waitForFunds.js';
 import distributeBNB from './lib/distributeBNB.js';
 
